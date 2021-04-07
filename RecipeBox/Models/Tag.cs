@@ -6,6 +6,7 @@ namespace RecipeBox.Models
     {
         public int TagId { get; set; }
         public string Name { get; set; }
+        public string Details { get; set; }
         public virtual ICollection<RecipeTag> Recipes { get; set; }
 
         public Tag()
