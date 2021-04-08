@@ -23,7 +23,31 @@ namespace RecipeBox.Controllers
         }
         public async Task<ActionResult> Index()
         {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+            List<Recipe> userRecipes = _db.Recipes.Where(entry => entry.User.Id == currentUser.Id).ToList();
+            return View(userRecipes);
+        }
+
+        public ActionResult Create()
+        {
+            ViewBag.TagId = new SelectList(_db.Tags, "TagId", "Name");
             return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(Recipe recipe, int TagId)
+        {
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+            recipe.User = currentUser;
+            _db.Recipes.Add(recipe);
+            if (TagId != 0)
+            {
+                _db.RecipeTag.Add(new RecipeTag() { TagId = TagId, RecipeId = recipe.RecipeId });
+            }
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
