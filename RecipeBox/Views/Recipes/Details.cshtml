@@ -10,19 +10,19 @@
 
 @if (@Model.Tags.Count == 0)
 {
-  <p>This item does not belong to any tags</p>
+  <p>This recipe does not belong to any tags</p>
 }
 else
 {
   <h4>Tags the recipe belongs to:</h4>
   <ul>
-    @foreach(var join in Model.Tags)
+    @foreach (var join in Model.Tags)
     {
       <li>@join.Tag.Name</li>
-      @using (Html.BeginForm("DeleteTag", "Items"))
+      @using (Html.BeginForm("DeleteTag", "Tags"))
       {
         @Html.Hidden("joinId", @join.RecipeTagId)
-        <input type="submit" value="Delete"/>
+        <input type="submit" value="Delete" />
       }
     }
   </ul>
