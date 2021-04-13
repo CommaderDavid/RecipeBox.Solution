@@ -33,5 +33,14 @@ namespace RecipeBox.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public ActionResult Details(int id)
+        {
+            Tag thisTag = _db.Tags
+              .Include(tag => tag.Recipes)
+                .ThenInclude(join => join.Recipe)
+              .FirstOrDefault(tag => tag.TagId == id);
+            return View(thisTag);
+        }
     }
 }
