@@ -50,6 +50,15 @@ namespace RecipeBox.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Details(int id)
+        {
+            Recipe thisRecipe = _db.Recipes
+              .Include(recipe => recipe.Tags)
+                .ThenInclude(join => join.Recipe)
+              .FirstOrDefault(recipe => recipe.RecipeId == id);
+            return View(thisRecipe);
+        }
+
         public ActionResult Edit(int id)
         {
             Recipe thisRecipe = _db.Recipes.FirstOrDefault(recipe => recipe.RecipeId == id);
