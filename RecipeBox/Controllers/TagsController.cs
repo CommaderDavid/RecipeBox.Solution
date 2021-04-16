@@ -23,13 +23,18 @@ namespace RecipeBox.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.RecipeId = new SelectList(_db.Recipes, "RecipeId", "Name");
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(Tag tag)
+        public ActionResult Create(Tag tag, int RecipeId)
         {
             _db.Tags.Add(tag);
+            if (RecipeId != 0)
+            {
+                _db.RecipeTag.Add(new RecipeTag() { RecipeId = RecipeId, TagId = tag.TagId });
+            }
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

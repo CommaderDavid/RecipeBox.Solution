@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using RecipeBox.Models;
+using Newtonsoft.Json;
 
 namespace RecipeBox.Controllers
 {
@@ -42,6 +43,7 @@ namespace RecipeBox.Controllers
             ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
             recipe.User = currentUser;
             _db.Recipes.Add(recipe);
+
             if (TagId != 0)
             {
                 _db.RecipeTag.Add(new RecipeTag() { TagId = TagId, RecipeId = recipe.RecipeId });
@@ -54,7 +56,7 @@ namespace RecipeBox.Controllers
         {
             Recipe thisRecipe = _db.Recipes
               .Include(recipe => recipe.Tags)
-                .ThenInclude(join => join.Recipe)
+                .ThenInclude(join => join.Tag)
               .FirstOrDefault(recipe => recipe.RecipeId == id);
             return View(thisRecipe);
         }
